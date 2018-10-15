@@ -11,37 +11,41 @@ fuzion.api_key = "1234567890"
 fuzion.api_secret_key = "1234567890"
 
 from fuzion import Attendee
-data = Attendee(fuzion_event_id=123).query() # "data" is now a python list of dicts
+Attendee(fuzion_event_id="123").query() # returns a python list of `Attendee` dict-like objects 
 
-attendee = Attendee(fuzion_event_id=123).get(attendee_id=123) # "data" is not a python dict with the attendee data
+attendee = Attendee(fuzion_event_id="123").get(attendee_id="123") 
+# "data" is now a `Attendee` dict-like with the attendee data
+
+print(attendee.fuzion_attendee_id, attendee['first_name'])
+>>> "123" "John"
 
 # credentials can also be set per-object
-attendee = Attendee(fuzion_event_id=123, api_key="1234567890", api_secret_key="1234567890").post(registration_number="1234")
+attendee = Attendee(fuzion_event_id="123", api_key="1234567890", api_secret_key="1234567890").post(registration_number="1234")
 
 
 # Objects with sub-resources, such as contacts:
 from fuzion import Exhibitor
-exhibitor = Exhibitor(fuzion_event_id=123).get(exhibitor_id=123)
+exhibitor = Exhibitor(fuzion_event_id="123").get(exhibitor_id="123")
 contacts = exhibitor.contacts.query()
 
 
 # Objects with relationships, such as exhibitors booth where one normally adds
 # an existing object, updates the relationship attributes or deletes the relationship:
 from fuzion import Exhibitor
-exhibitor = Exhibitor(fuzion_event_id=123).get(exhibitor_id=123)
+exhibitor = Exhibitor(fuzion_event_id="123").get(exhibitor_id="123")
 
 # add existing booth to exhibitor
-exhibitor.booths.add_existing(booth_id=456)
+exhibitor.booths.add_existing(booth_id="456")
 
 # update relationship
-exhibitor.booths.update_relationship(booth_id=456, relationship_type_flag=1, relationship_confirmation_status_flag=2)
+exhibitor.booths.update_relationship(booth_id="456", relationship_type_flag=1, relationship_confirmation_status_flag=2)
 
 # delete relationship
-exhibitor.booths.delete_relationship(booth_id=456)
+exhibitor.booths.delete_relationship(booth_id="456")
 
 
 # You don't have to fetch the whole data from the server before accessing sub-resources/relationships
-exhibitor = Exhibitor(fuzion_event_id=123, exhibitor_id=123)
+exhibitor = Exhibitor(fuzion_event_id="123", exhibitor_id="123")
 exhibitor.third_parties.query()
 ```
 
@@ -79,7 +83,7 @@ Exposes the `query` method, used to retrieve a list of objects.
 Provides paging by accepting the `page_size` and `start` parameters:
 
 ```
-Attendee(fuzion_event_id=123).query(page_size=250, start=2)
+Attendee(fuzion_event_id="123").query(page_size=250, start=2)
 ```
 
 If these paramters are ommited they default to `page_size=500` and `start=0`
@@ -89,13 +93,13 @@ Exposes the `post` method, used to create a new object
 Attributes to be used as the request body are sent as kwargs, such as:
 
 ```
-Poster(fuzion_event_id=123).post(fuzion_abstract_id=123456, name="New poster", description="The poster's description")
+Poster(fuzion_event_id="123").post(fuzion_abstract_id="123456", name="New poster", description="The poster's description")
 ```
 
 Nested attributes should be dicts:
 
 ```
-Attendee(fuzion_event_id=123).post(registration_number=1234567890, contact={"first_name": "John", "last_name": "Doe"})
+Attendee(fuzion_event_id="123").post(registration_number="1234567890", contact={"first_name": "John", "last_name": "Doe"})
 ```
 
 ### UpdateObjectMixin
@@ -103,11 +107,11 @@ Exposes the `put` method, used to update an existing object.
 Expects the resource specific object id attribute to be either set on class level or supplied in this call:
 
 ```
-Exhibitor(fuzion_event_id=123).put(exhibitor_id=456, exhibitor_name="The new name")
+Exhibitor(fuzion_event_id="123").put(exhibitor_id="456", exhibitor_name="The new name")
 
 # or 
 
-Exhibitor(fuzion_event_id=123, exhibitor_id=456).put(exhibitor_name="The new name")
+Exhibitor(fuzion_event_id="123", exhibitor_id="456").put(exhibitor_name="The new name")
 ``` 
 
 ### DestroyObjectMixin
