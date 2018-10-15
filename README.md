@@ -143,3 +143,6 @@ and the original `request` and `response` objects
 
 If a certain call required the object id to be set (such as `update`) a `ObjectIdMissingError` will be thrown
 
+
+NOTE:
+Python 3 only!

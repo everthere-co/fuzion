@@ -1,55 +1,60 @@
 from fuzion.resource import Resource
-from fuzion.mixins import ListObjectsMixin, CreateObjectMixin,\
-    UpdateObjectMixin, RetrieveNotSupportedMixin
+from fuzion.mixins import (
+    ListObjectsMixin,
+    CreateObjectMixin,
+    UpdateObjectMixin,
+    RetrieveNotSupportedMixin,
+)
 from fuzion.exceptions import ObjectIdMissingError
-from fuzion.floor_plan.sub_resources import FloorPlanPlot, PlotObject,\
-    PlotCategoryPlot, PlotTypePlot
+from fuzion.floor_plan.sub_resources import (
+    FloorPlanPlot,
+    PlotObject,
+    PlotCategoryPlot,
+    PlotTypePlot,
+)
+from fuzion.decorators import has_object_id_set
 
-class FloorPlan(ListObjectsMixin, CreateObjectMixin, 
-                UpdateObjectMixin, Resource):
+
+class FloorPlan(ListObjectsMixin, CreateObjectMixin, UpdateObjectMixin, Resource):
     path = "floorplans"
-    object_id_attr_name = "floorplan_id"
-    
+    object_id_attr_name = "fuzion_floorplan_id"
+
     @property
+    @has_object_id_set
     def plots(self):
-        if self.floorplan_id:
-            return FloorPlanPlot(parent_object=self)
-        raise ObjectIdMissingError(f"`{self.object_id_attr_name}` attribute is not set")
-    
-    
+        return FloorPlanPlot(parent_object=self)
+
+
 class Plot(RetrieveNotSupportedMixin, Resource):
     path = "plots"
-    object_id_attr_name = "plot_id"
-    
+    object_id_attr_name = "fuzion_plot_id"
+
     @property
+    @has_object_id_set
     def objects(self):
-        if self.plot_id:
-            return PlotObject(parent_object=self)
-        raise ObjectIdMissingError(f"`{self.object_id_attr_name}` attribute is not set")
-        
+        return PlotObject(parent_object=self)
+
 
 class FloorPlanObject(RetrieveNotSupportedMixin, Resource):
     path = "floorplan-objects"
-    object_id_attr_name = "floorplan_object_id"
-    
-    
+    object_id_attr_name = "fuzion_floorplan_object_id"
+
+
 class PlotCategory(RetrieveNotSupportedMixin, Resource):
     path = "plot-categories"
-    object_id_attr_name = "plot_category_id"
-    
+    object_id_attr_name = "fuzion_plot_category_id"
+
     @property
+    @has_object_id_set
     def plots(self):
-        if self.plot_category_id:
-            return PlotCategoryPlot(parent_object=self)
-        raise ObjectIdMissingError(f"`{self.object_id_attr_name}` attribute is not set")
-    
+        return PlotCategoryPlot(parent_object=self)
+
 
 class PlotType(RetrieveNotSupportedMixin, Resource):
     path = "plot-types"
-    object_id_attr_name = "plot_type_id"
-    
+    object_id_attr_name = "fuzion_plot_type_id"
+
     @property
+    @has_object_id_set
     def plots(self):
-        if self.plot_type_id:
-            return PlotTypePlot(parent_object=self)
-        raise ObjectIdMissingError(f"`{self.object_id_attr_name}` attribute is not set")
+        return PlotTypePlot(parent_object=self)
