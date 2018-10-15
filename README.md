@@ -65,6 +65,7 @@ This class takes care of building the requests themselves, setting the partner r
 `__init__` : Requires at least the `fuzion_event_id`
              One can also set the `api_key` and `api_secret_key` attributes here for each resource.
              Accepts the corresponding `object_id_attr_name` to set the instance to (i.e. "attendee_id" kwarg will set the instance's `attendee_id` attribute accordingly)
+
 `_request` : Makes the request according to the path, method and payload. Generates the signatures accordingly.
 
 ### SubResource
