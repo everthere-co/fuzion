@@ -11,42 +11,46 @@ fuzion.api_key = "1234567890"
 fuzion.api_secret_key = "1234567890"
 
 from fuzion import Attendee
-Attendee(fuzion_event_id="123").query() # returns a python list of `Attendee` dict-like objects 
+Attendee(fuzion_event_id="EV123").query() # returns a python list of `Attendee` dict-like objects 
 
-attendee = Attendee(fuzion_event_id="123").get(attendee_id="123") 
-# "data" is now a `Attendee` dict-like with the attendee data
+attendee = Attendee(fuzion_event_id="EV123").get(fuzion_attendee_id="A123") 
+# "attendee" is now a `Attendee` dict-like object with the attendee data
 
-print(attendee.fuzion_attendee_id, attendee['first_name'])
->>> "123" "John"
+print(attendee.fuzion_attendee_id, attendee['first_name']) # prints: "A123" "John"
 
 # credentials can also be set per-object
-attendee = Attendee(fuzion_event_id="123", api_key="1234567890", api_secret_key="1234567890").post(registration_number="1234")
+attendee = Attendee(fuzion_event_id="EV123", api_key="1234567890", api_secret_key="1234567890").post(registration_number="RN1234")
 
 
 # Objects with sub-resources, such as contacts:
 from fuzion import Exhibitor
-exhibitor = Exhibitor(fuzion_event_id="123").get(exhibitor_id="123")
+exhibitor = Exhibitor(fuzion_event_id="EV123").get(fuzion_exhibitor_id="E123")
 contacts = exhibitor.contacts.query()
 
 
 # Objects with relationships, such as exhibitors booth where one normally adds
 # an existing object, updates the relationship attributes or deletes the relationship:
-from fuzion import Exhibitor
-exhibitor = Exhibitor(fuzion_event_id="123").get(exhibitor_id="123")
+exhibitor = Exhibitor(fuzion_event_id="EV123").get(fuzion_exhibitor_id="E123")
 
 # add existing booth to exhibitor
-exhibitor.booths.add_existing(booth_id="456")
+exhibitor.booths.add_existing(fuzion_booth_id="B456")
 
 # update relationship
-exhibitor.booths.update_relationship(booth_id="456", relationship_type_flag=1, relationship_confirmation_status_flag=2)
+exhibitor.booths.update_relationship(fuzion_booth_id="B456", relationship_type_flag=1, relationship_confirmation_status_flag=2)
 
 # delete relationship
-exhibitor.booths.delete_relationship(booth_id="456")
+exhibitor.booths.delete_relationship(fuzion_booth_id="B456")
 
 
 # You don't have to fetch the whole data from the server before accessing sub-resources/relationships
-exhibitor = Exhibitor(fuzion_event_id="123", exhibitor_id="123")
+exhibitor = Exhibitor(fuzion_event_id="EV123", fuzion_exhibitor_id="E123")
 exhibitor.third_parties.query()
+
+
+# Paging in query calls:
+# Default paging parameters if not specified are `page_size=500` and `start=0`
+attendees = Attendee(fuzion_event_id="EV123").query(page_size=200, start=2)
+
 ```
 
 
