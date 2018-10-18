@@ -52,8 +52,11 @@ from fuzion.abstract import (
 )
 from fuzion.exhibitor import Booth, Exhibitor, ExhibitorProduct, ThirdParty
 from fuzion.floor_plan import FloorPlan, FloorPlanObject, Plot, PlotCategory, PlotType
+from fuzion.notification_webhook import NotificationWebhook
+from fuzion.error_webhook import ErrorWebhook
 from fuzion.resource import Resource
 
 
 api_key = os.getenv("FUZION_API_KEY", None)
 api_secret_key = os.getenv("FUZION_API_SECRET_KEY", None)
+host = os.getenv("FUZION_API_HOST", "fuzionapi.com/v1/")

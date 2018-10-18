@@ -33,6 +33,11 @@ class SubResource(Resource):
 
         if self.parent_object.fuzion_event_id not in args:
             kwargs.setdefault("fuzion_event_id", self.parent_object.fuzion_event_id)
+        
+        kwargs.setdefault("api_key", self.parent_object.api_key)
+        kwargs.setdefault("api_secret_key", self.parent_object.api_secret_key)
+        kwargs.setdefault("host", self.parent_object.host)
+        
         Resource.__init__(self, *args, **kwargs)
 
         self.path = self.path.format(self.parent_object.internal_object_id)

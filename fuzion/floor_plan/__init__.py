@@ -1,6 +1,6 @@
 from fuzion.resource import Resource
 from fuzion.mixins import (
-    ListObjectsMixin,
+    ListObjectsPaginationMixin,
     CreateObjectMixin,
     UpdateObjectMixin,
     RetrieveNotSupportedMixin,
@@ -15,7 +15,7 @@ from fuzion.floor_plan.sub_resources import (
 from fuzion.decorators import has_object_id_set
 
 
-class FloorPlan(ListObjectsMixin, CreateObjectMixin, UpdateObjectMixin, Resource):
+class FloorPlan(ListObjectsPaginationMixin, CreateObjectMixin, UpdateObjectMixin, Resource):
     path = "floorplans"
     object_id_attr_name = "fuzion_floorplan_id"
 

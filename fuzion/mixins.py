@@ -23,6 +23,20 @@ class ListObjectsMixin:
     Provides retrieving multiple objects with GET
     """
 
+    def query(self, **values):
+        return self._request(
+            method="get",
+            path=self.path,
+            values=values,
+            paging={},
+        )
+
+
+class ListObjectsPaginationMixin:
+    """
+    Provides retrieving multiple objects with GET with pagination enabled
+    """
+    
     def query(self, page_size=500, start=0, **values):
         page_size = page_size or 500
         start = start or 0
@@ -79,7 +93,7 @@ class DestroyObjectMixin:
 
 
 class RetrieveNotSupportedMixin(
-    ListObjectsMixin, CreateObjectMixin, UpdateObjectMixin, DestroyObjectMixin
+    ListObjectsPaginationMixin, CreateObjectMixin, UpdateObjectMixin, DestroyObjectMixin
 ):
     """
     Convenienve mixin that groups all but the retrieving a single object option
@@ -89,7 +103,7 @@ class RetrieveNotSupportedMixin(
 
 
 class AllCRUDMixin(
-    ListObjectsMixin,
+    ListObjectsPaginationMixin,
     CreateObjectMixin,
     RetrieveObjectMixin,
     UpdateObjectMixin,

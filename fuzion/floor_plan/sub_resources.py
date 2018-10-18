@@ -1,16 +1,16 @@
-from fuzion.mixins import ListObjectsMixin
+from fuzion.mixins import ListObjectsPaginationMixin
 from fuzion.subresource import SubResource, Relationship
 
 
-class FloorPlanPlot(ListObjectsMixin, SubResource):
+class FloorPlanPlot(ListObjectsPaginationMixin, SubResource):
     path = "floorplans/{}/plots"
 
 
-class PlotCategoryPlot(ListObjectsMixin, SubResource):
+class PlotCategoryPlot(ListObjectsPaginationMixin, SubResource):
     path = "plot-categories/{}/plots"
 
 
-class PlotTypePlot(ListObjectsMixin, SubResource):
+class PlotTypePlot(ListObjectsPaginationMixin, SubResource):
     path = "plot-types/{}/plots"
 
 

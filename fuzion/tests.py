@@ -59,7 +59,34 @@ class TestResource(unittest.TestCase):
             "622r1BPOffqxIieVXH8Laq7gZIek1srUlmztGxngXLw=",
             "signatures not equal",
         )
-
+    
+    @patch("fuzion.resource.requests")
+    def test_stage_env(self, requests):
+        MockResource.new(Attendee(fuzion_event_id="123", host="stage.fuzionapi.com/v1/")).query()
+        requests.request.assert_called_with(
+            "get",
+            "https://stage.fuzionapi.com/v1/attendees",
+            headers={
+                **MockResource.mock_general_headers,
+                **{"page_size": "500", "start": "0"},
+            },
+            params={},
+        )
+    
+    @patch("fuzion.resource.requests")
+    def test_subresouce_gets_params_of_father(self, requests):
+        exhibitor = MockResource.new(Exhibitor(fuzion_event_id="123",
+                                               api_key="subresource123", 
+                                               api_secret_key="subresource123",  
+                                               host="stage.fuzionapi.com/v1/", 
+                                               fuzion_exhibitor_id="123"))
+        contacts_resource = exhibitor.contacts
+        
+        self.assertTrue(contacts_resource.host == "stage.fuzionapi.com/v1/")
+        self.assertTrue(contacts_resource.api_key == "subresource123")
+        self.assertTrue(contacts_resource.api_secret_key == "subresource123")
+        self.assertTrue(contacts_resource.fuzion_event_id == "123")
+        
     def test_error_payload(self):
         func = Resource(fuzion_event_id="123").process_response
 
@@ -1818,6 +1845,88 @@ class TestTransaction(unittest.TestCase):
         requests.request.assert_called_with(
             "delete",
             "https://fuzionapi.com/v1/attendee-transactions/000",
+            headers=MockResource.mock_general_headers,
+            json={},
+        )
+        
+
+class TestNotificationWebhook(unittest.TestCase):
+    def setUp(self):
+        unittest.TestCase.setUp(self)
+        self.notification_wh = MockResource.new(NotificationWebhook(fuzion_event_id="123"))
+
+    @patch("fuzion.resource.requests")
+    def test_query(self, requests):
+        self.notification_wh.query()
+        requests.request.assert_called_with(
+            "get",
+            "https://fuzionapi.com/v1/notification-webhooks",
+            headers={
+                **MockResource.mock_general_headers,
+            },
+            params={},
+        )
+
+    @patch("fuzion.resource.requests")
+    def test_post(self, requests):
+        self.notification_wh.post(callback_url="https://mycallback.com/fuzion/", 
+                                  entity_type="attendee", 
+                                  entity_operation="insert")
+        
+        requests.request.assert_called_with(
+            "post",
+            "https://fuzionapi.com/v1/notification-webhooks",
+            headers={**MockResource.mock_general_headers},
+            json={"callback_url": "https://mycallback.com/fuzion/", 
+                  "entity_type": "attendee", 
+                  "entity_operation": "insert"},
+        )
+
+    @patch("fuzion.resource.requests")
+    def test_delete(self, requests):
+        self.notification_wh.delete(fuzion_webhook_id="000")
+        requests.request.assert_called_with(
+            "delete",
+            "https://fuzionapi.com/v1/notification-webhooks/000",
+            headers=MockResource.mock_general_headers,
+            json={},
+        )
+
+
+class TestErrorWebhook(unittest.TestCase):
+    def setUp(self):
+        unittest.TestCase.setUp(self)
+        self.error_wh = MockResource.new(ErrorWebhook(fuzion_event_id="123"))
+
+    @patch("fuzion.resource.requests")
+    def test_query(self, requests):
+        self.error_wh.query()
+        requests.request.assert_called_with(
+            "get",
+            "https://fuzionapi.com/v1/errors-webhooks",
+            headers={
+                **MockResource.mock_general_headers,
+            },
+            params={},
+        )
+
+    @patch("fuzion.resource.requests")
+    def test_post(self, requests):
+        self.error_wh.post(callback_url="https://mycallback.com/fuzion/")
+        
+        requests.request.assert_called_with(
+            "post",
+            "https://fuzionapi.com/v1/errors-webhooks",
+            headers={**MockResource.mock_general_headers},
+            json={"callback_url": "https://mycallback.com/fuzion/"},
+        )
+
+    @patch("fuzion.resource.requests")
+    def test_delete(self, requests):
+        self.error_wh.delete(fuzion_webhook_id="000")
+        requests.request.assert_called_with(
+            "delete",
+            "https://fuzionapi.com/v1/errors-webhooks/000",
             headers=MockResource.mock_general_headers,
             json={},
         )

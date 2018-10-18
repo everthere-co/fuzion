@@ -16,7 +16,7 @@ from fuzion.exceptions import (
 
 
 class Resource(dict):
-    host = "fuzionapi.com/v1/"
+    host = ""
     path = ""  # The object's path in fuzion's API
     scheme = "https"
     options = {}
@@ -24,11 +24,12 @@ class Resource(dict):
     object_id_attr_name = None  # The object's id ('attendee_id' for Attendee, etc..)
 
     def __init__(
-        self, fuzion_event_id, api_key=None, api_secret_key=None, *args, **kwargs
+        self, fuzion_event_id, api_key=None, api_secret_key=None, host=None, *args, **kwargs
     ):
         self.fuzion_event_id = fuzion_event_id
         self.api_key = api_key or fuzion.api_key
         self.api_secret_key = api_secret_key or fuzion.api_secret_key
+        self.host = host or fuzion.host
 
         # If the object's id attibute was sent, set it for this instance
         if self.object_id_attr_name in kwargs:
@@ -126,7 +127,11 @@ class Resource(dict):
         return payload
 
     def process_payload(self, payload):
-        return self.__class__.new(self.fuzion_event_id, payload)
+        return self.__class__.new(self.fuzion_event_id,
+                                  payload, 
+                                  api_key=self.api_key, 
+                                  api_secret_key=self.api_secret_key, 
+                                  host=self.host)
 
     @classmethod
     def new(cls, fuzion_event_id, item, *args, **kwargs):

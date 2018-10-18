@@ -1,4 +1,4 @@
-from fuzion.mixins import RetrieveNotSupportedMixin, ListObjectsMixin
+from fuzion.mixins import RetrieveNotSupportedMixin, ListObjectsPaginationMixin
 from fuzion.subresource import SubResource, Relationship
 
 
@@ -12,21 +12,21 @@ class ExhibitorAddress(RetrieveNotSupportedMixin, SubResource):
     object_id_attr_name = "fuzion_address_id"
 
 
-class ExhibitorBooth(ListObjectsMixin, Relationship):
+class ExhibitorBooth(ListObjectsPaginationMixin, Relationship):
     path = "exhibitors/{}/booths"
     object_id_attr_name = "fuzion_booth_id"
 
 
-class ExhibitorThirdParty(ListObjectsMixin, Relationship):
+class ExhibitorThirdParty(ListObjectsPaginationMixin, Relationship):
     path = "exhibitors/{}/third-parties"
     object_id_attr_name = "fuzion_third_party_id"
 
 
-class BoothThirdParty(ListObjectsMixin, SubResource):
+class BoothThirdParty(ListObjectsPaginationMixin, SubResource):
     path = "booths/{}/third-parties"
 
 
-class BoothExhibitor(ListObjectsMixin, SubResource):
+class BoothExhibitor(ListObjectsPaginationMixin, SubResource):
     path = "booths/{}/exhibitors"
 
 
@@ -50,10 +50,10 @@ class ThirdPartyAddress(RetrieveNotSupportedMixin, SubResource):
     object_id_attr_name = "fuzion_address_id"
 
 
-class ThirdPartyExhibitor(ListObjectsMixin, SubResource):
+class ThirdPartyExhibitor(ListObjectsPaginationMixin, SubResource):
     path = "third-parties/{}/exhibitors"
 
 
-class ThirdPartyBooth(ListObjectsMixin, Relationship):
+class ThirdPartyBooth(ListObjectsPaginationMixin, Relationship):
     path = "third-parties/{}/booths"
     object_id_attr_name = "fuzion_booth_id"
