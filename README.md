@@ -72,18 +72,27 @@ This class takes care of building the requests themselves, setting the partner r
 
 `_request` : Makes the request according to the path, method and payload. Generates the signatures accordingly.
 
+
 ### SubResource
 A SubResource builds its `path` dynamically according to a `parent_object`. 
 Inheriting classes are aware of the `parent_object` passed and can use it to build the `path` accordingly
+
 
 ### Relationship
 A SubResource that exposes `add_existing`, `update_relationship` and `delete_relationship`.
 It is special because it cannot use the normal "POST" method as `add_existing` passes an object id in the path
 
+
 ### RetrieveObjectMixin
 Exposes the `get` method (to retrieve an object with a specific id) 
 
+
 ### ListObjectsMixin
+Exposes the `query` method, used to retrieve a list of objects.
+Used for resources without any paging information required (i.e. notification webhooks)
+
+
+### ListObjectsPaginationMixin
 Exposes the `query` method, used to retrieve a list of objects.
 Provides paging by accepting the `page_size` and `start` parameters:
 
@@ -92,6 +101,7 @@ Attendee(fuzion_event_id="123").query(page_size=250, start=2)
 ```
 
 If these paramters are ommited they default to `page_size=500` and `start=0`
+
 
 ### CreateObjectMixin
 Exposes the `post` method, used to create a new object
@@ -124,11 +134,11 @@ Exposes the `delete` method, used to delete an existing object
 As the `update` method also expect the object id attribute to be set or sent
 
 ### RetrieveNotSupportedMixin
-A convenience mixin that groups `ListObjectsMixin`, `CreateObjectMixin`, `UpdateObjectMixin`, `DestroyObjectMixin`
+A convenience mixin that groups `ListObjectsPaginationMixin`, `CreateObjectMixin`, `UpdateObjectMixin`, `DestroyObjectMixin`
 together. All BUT the `RetrieveObjectMixin`
 
 ### AllCRUDMixin
-A convenience mixin that groups `ListObjectsMixin`, `CreateObjectMixin`, `UpdateObjectMixin`, `DestroyObjectMixin`
+A convenience mixin that groups `ListObjectsPaginationMixin`, `CreateObjectMixin`, `UpdateObjectMixin`, `DestroyObjectMixin`
 WITH `RetrieveObjectMixin`
 
 
