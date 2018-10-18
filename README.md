@@ -6,9 +6,10 @@ Python package as API for Freeman's Fuzion
 ```
 import fuzion
 
-# Defaults to os environment variables FUZION_API_KEY and FUZION_API_SECRET_KEY respectively
+# Defaults to os environment variables FUZION_API_KEY, FUZION_API_SECRET_KEY and FUZION_API_HOST respectively
 fuzion.api_key = "1234567890"
 fuzion.api_secret_key = "1234567890"
+fuzion.host = "fuzionapi.com/v1/"
 
 from fuzion import Attendee
 Attendee(fuzion_event_id="EV123").query() # returns a python list of `Attendee` dict-like objects 
@@ -19,7 +20,7 @@ attendee = Attendee(fuzion_event_id="EV123").get(fuzion_attendee_id="A123")
 print(attendee.fuzion_attendee_id, attendee['first_name']) # prints: "A123" "John"
 
 # credentials can also be set per-object
-attendee = Attendee(fuzion_event_id="EV123", api_key="1234567890", api_secret_key="1234567890").post(registration_number="RN1234")
+attendee = Attendee(fuzion_event_id="EV123", api_key="1234567890", api_secret_key="1234567890", host="stage.fuzionapi.com/v1/").post(registration_number="RN1234")
 
 
 # Objects with sub-resources, such as contacts:
